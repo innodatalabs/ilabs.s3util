@@ -41,14 +41,15 @@ def cli_pypi(args):
         upload_object(x.fname, obj, ACL='public-read')
 
     for package in sorted(packages):
-        public_files = list_public_files(s3, bucket, prefix + '/' + package)
+        key = prefix + '/' + package if prefix is not None else package
+        public_files = list_public_files(s3, bucket, key)
 
         body = '\n'.join(TEMPLATE_LINE.format(
             name=html.escape(name)) for name in public_files if not name.endswith('index.html'))
         text = TEMPLATE.format(body=body)
 
         print('Creating index for package %s' % package)
-        s3.Object(bucket, prefix + '/' + package + '/index.html').put(
+        s3.Object(bucket, key + '/index.html').put(
             Body=text.encode(),
             ContentType='text/html',
             CacheControl='public, must-revalidate, proxy-revalidate, max-age=0',
@@ -187,9 +188,9 @@ def parse_target(url):
     return bucket, prefix
 
 def list_public_files(s3, bucket, prefix=None):
-    print(bucket, prefix)
     if prefix is not None:
         prefix = prefix + '/'
+
     for key in s3.Bucket(bucket).objects.filter(Delimiter='/', Prefix=prefix):
         if not is_public_read(key):
             continue
