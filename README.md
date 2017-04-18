@@ -1,4 +1,6 @@
 # ilabs.s3util
+[![PyPI version](https://badge.fury.io/py/ilabs.s3util.svg)](https://badge.fury.io/py/ilabs.s3util)
+
 Use Amazon S3 static website to distribute private pypi packages.
 
 Inspired by https://github.com/novemberfiveco/s3pypi
