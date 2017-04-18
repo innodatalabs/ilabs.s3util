@@ -7,6 +7,7 @@ import boto3
 import botocore
 import io
 from types import SimpleNamespace
+import sys
 
 
 def cli_pypi(args):
@@ -132,7 +133,16 @@ def key_exists(s3, bucket, key):
     return True
 
 def pip_conf():
-    for fname in [r'~/.config/pip/pip.conf', r'~/.pip/pip.conf', r'~/.piprc', r'/etc/pip.conf']:
+    if sys.platform == 'linux':
+        paths = [r'~/.config/pip/pip.conf', r'~/.pip/pip.conf', r'~/.piprc', r'/etc/pip.conf']
+    elif sys.platform == 'win32:
+        paths = [r'~/AppData/Roaming/pip/pip.ini', '~/pip/pip.ini']
+    elif sys.platform == 'darwin':
+        paths = [r'~/Library/Application Support/pip/pip.conf']
+    else:
+        assert False, sys.platform
+
+    for fname in paths:
         fname = os.path.expanduser(fname)
         if os.path.isfile(fname):
             conf = configparser.ConfigParser()
