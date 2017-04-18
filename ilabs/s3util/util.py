@@ -104,24 +104,25 @@ def upload_object(fname, obj, **options):
 def package_from_name(name):
     name = os.path.basename(name)
     package, _ = name.split('-', 1)
-    package = package.replace('.', '-')
+    package = re.sub(r'[-_.]+', '-', package)
 
     return package
 
-def prepare(mask):
-    for fname in glob.glob(mask):
-        if not os.path.isfile(fname):
-            raise RuntimeError('Can not access file %s' % fname)
+def prepare(masks):
+    for mask in masks:
+        for fname in glob.glob(mask):
+            if not os.path.isfile(fname):
+                raise RuntimeError('Can not access file %s' % fname)
 
-        name = os.path.basename(fname)
-        _, ext = os.path.splitext(name)
-        mime = MIMES.get(ext, 'application/octet-stream')
+            name = os.path.basename(fname)
+            _, ext = os.path.splitext(name)
+            mime = MIMES.get(ext, 'application/octet-stream')
 
-        yield SimpleNamespace(
-            fname=fname,
-            name=name,
-            mime=mime
-        )
+            yield SimpleNamespace(
+                fname=fname,
+                name=name,
+                mime=mime
+            )
 
 def key_exists(s3, bucket, key):
     try:

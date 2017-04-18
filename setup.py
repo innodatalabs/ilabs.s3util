@@ -36,8 +36,8 @@ setup(
     namespace_packages=['ilabs'],
     entry_points={
         'console_scripts': [
-            's3pypi=ilabs.s3util.main:main_pypi',
-            's3upload=ilabs.s3util.main:main_upload',
+            's3pypi=ilabs.s3util.main_pypi:main',
+            's3upload=ilabs.s3util.main_upload:main',
         ]
     }
 )

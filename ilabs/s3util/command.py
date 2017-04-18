@@ -28,6 +28,8 @@ class PyPICommand(Command):
         if self.file_mask is None:
             raise DistutilsOptionError('must provide valid "file-mask"')
 
+        self.file_mask = [self._file_mask]
+
     def run(self):
         cli_pypi(self)
 
@@ -61,6 +63,8 @@ class UploadCommand(Command):
 
         if self.target is None:
             raise DistutilsOptionError('must provide "target" value')
+
+        self.file_mask = [self._file_mask]
 
     def run(self):
         cli_upload(self)
