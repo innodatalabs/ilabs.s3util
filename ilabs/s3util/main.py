@@ -11,7 +11,6 @@ def main_pypi():
     parser.add_argument('--aws_secret_access_key', default=None, help='AWS secret access key. If not set, will use AWS credentials configuration, if available')
 
     args = parser.parse_args()
-    print(args)
 
     parser.exit(cli_pypi(args))
 
@@ -26,6 +25,5 @@ def main_upload():
     parser.add_argument('--aws_secret_access_key', default=None, help='AWS secret access key. If not set, will use AWS credentials configuration, if available')
 
     args = parser.parse_args()
-    print(args)
 
     parser.exit(cli_upload(args))
