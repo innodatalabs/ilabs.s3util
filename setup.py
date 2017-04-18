@@ -4,7 +4,6 @@ import os
 import re
 from ilabs.s3util import __version__, __description__, __url__, __author__, \
     __author_email__, __keywords__
-from ilabs.s3util.command import PyPICommand, UploadCommand
 
 NAME = 'ilabs.s3util'
 
@@ -40,21 +39,5 @@ setup(
             's3pypi=ilabs.s3util.main:main_pypi',
             's3upload=ilabs.s3util.main:main_upload',
         ]
-    },
-    cmdclass={
-        's3pypi': PyPICommand,
-        's3upload': UploadCommand
-    },
-    options={
-        's3pypi': {
-            'force': True
-        },
-
-        's3upload': {
-            'file_mask': 'dist/*.whl',
-            'target': 's3://red_repository/temp',
-            'acl': 'public-read',
-            'force': True
-        }
     }
 )
