@@ -135,7 +135,7 @@ def key_exists(s3, bucket, key):
 def pip_conf():
     if sys.platform == 'linux':
         paths = [r'~/.config/pip/pip.conf', r'~/.pip/pip.conf', r'~/.piprc', r'/etc/pip.conf']
-    elif sys.platform == 'win32:
+    elif sys.platform == 'win32':
         paths = [r'~/AppData/Roaming/pip/pip.ini', '~/pip/pip.ini']
     elif sys.platform == 'darwin':
         paths = [r'~/Library/Application Support/pip/pip.conf']

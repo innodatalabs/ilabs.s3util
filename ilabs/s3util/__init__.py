@@ -1,4 +1,4 @@
-__version__      = '0.2.6'
+__version__      = '0.2.7'
 __url__          = 'https://github.com/innodatalabs/ilabs.s3util'
 __author__       = 'Mike Kroutikov'
 __author_email__ = 'mkroutikov@innodata.com'
