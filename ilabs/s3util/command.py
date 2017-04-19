@@ -64,7 +64,7 @@ class UploadCommand(Command):
         if self.target is None:
             raise DistutilsOptionError('must provide "target" value')
 
-        self.file_mask = [self._file_mask]
+        self.file_mask = [self.file_mask]
 
     def run(self):
         cli_upload(self)
