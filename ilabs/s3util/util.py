@@ -155,6 +155,9 @@ def find_from_pip_conf():
     if conf is None:
         return None
 
+    if 'ilabs.s3util' in conf and 'target' in conf['ilabs.s3util']:
+        return conf['ilabs.s3util']
+
     if 'global' not in conf or 'extra-index-url' not in conf['global']:
         return None
 
@@ -170,11 +173,9 @@ def find_from_pip_conf():
     prefix = mtc.group(3)
     if prefix:
         assert prefix.startswith('/')
-        prefix = prefix[1:]
+        prefix = prefix.strip('/')
         if not prefix:
             prefix = None
-        elif prefix.endswith('/'):
-            prefix = prefix[:-1]
 
     if prefix:
         return 's3://' + bucket + '/' + prefix
