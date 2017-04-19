@@ -96,7 +96,7 @@ Which upload method to use, depends on your preferences.
    By the default, CLI will not override the package if the same version already
    exists in private pypi. To force overwrite use `'--force/-f` option:
    ```
-   s3pypi dist/*
+   s3pypi dist/* --force
    ```
 
 #### Use setup.py to upload packages to private pypi   
@@ -134,7 +134,7 @@ Generic CLI and `setup.py` tool for file upload to S3:
 
 #### CLI
 ```
-s3upload dist/* s3://bucket/prefix --acl public-read --force
+s3upload dist/* --target s3://bucket/prefix --acl public-read --force
 ```
 
 Uploadds all files found under `dist/*` to the bucket `s3://bucket/prefix`, setting
