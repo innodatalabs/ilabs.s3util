@@ -151,7 +151,7 @@ setup(
   },
   options={
     's3upload': {
-      'file-mask': 'dist/*',
+      'file_mask': 'dist/*',
       'target': 's3://<bucket_name>/<prefix>',
       'force': False,
       'acl': 'public-read'
