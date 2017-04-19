@@ -156,7 +156,7 @@ def find_from_pip_conf():
         return None
 
     if 'ilabs.s3util' in conf and 'target' in conf['ilabs.s3util']:
-        return conf['ilabs.s3util']
+        return conf['ilabs.s3util']['target']
 
     if 'global' not in conf or 'extra-index-url' not in conf['global']:
         return None
