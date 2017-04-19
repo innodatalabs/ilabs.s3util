@@ -34,7 +34,7 @@ no authentication. Protection is all in the "secret" bucket name.
    ```
    Copy this name to the clipboard, as you will need it later
 
-5. On your computer, open (or create) file `~/.config/pip/pip.conf` and
+5. On your computer, open (or create) file `~/.config/pip/pip.conf` (on Windows file name is `~/AppData/Rouming/pip/pip.ini`) and
    add the following under `[global]` section:
 
    ```
@@ -56,17 +56,13 @@ pip install ilabs.s3util
 ```
 
 ### configure AWS credentials
-Open or create file
-```
-~/.aws/credentials
-```
-and add the following lines there:
+Open or create file  `~/.aws/credentials` and add the following lines there:
 ```
 [default]
 aws_access_key_id=<YOUR_AWS_ACCESS_KEY_ID>
 aws_secret_access_key=<YOUR_AWS_SECRET_ACCESS_KEY>
 ```
-Finally, make sure that credentials are not readable by the general public:
+Finally, make sure that credentials are not readable by the general public (skip this step if you are on Windows):
 ```
 chmod 0600 ~/.aws/credentials
 ```
@@ -103,7 +99,7 @@ Which upload method to use, depends on your preferences.
 This is an alternative method to CLI, sometimes convenient in the automated
 build environments like Jenkins.
 
-1. Modify the contents of `setup.py` and add support for `ilabs.s3util` command:
+1. Modify the contents of `setup.py` and add support for `s3pypi` command:
 ```
 ...
 from ilabs.s3util.command import PyPICommand
@@ -141,6 +137,7 @@ Uploadds all files found under `dist/*` to the bucket `s3://bucket/prefix`, sett
 access as `public-read` and forcing overwrite if file already exist.
 
 ### setup.py
+You can use `UploadCommand` to upload files to S3 during `setup.py` processing, like this:
 ```
 ...
 from ilabs.s3util.command import UploadCommand
@@ -154,7 +151,7 @@ setup(
   },
   options={
     's3upload': {
-      'file_mask': 'dist/*',
+      'file-mask': 'dist/*',
       'target': 's3://<bucket_name>/<prefix>',
       'force': False,
       'acl': 'public-read'
