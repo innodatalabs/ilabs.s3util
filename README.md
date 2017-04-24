@@ -5,8 +5,8 @@ Use Amazon S3 static website to distribute private pypi packages.
 
 Inspired by https://github.com/novemberfiveco/s3pypi
 
-ATTENTION! Not very secure method, as we use unencrypted HTTP connection and
-no authentication. Protection is all in the "secret" bucket name.
+ATTENTION! Not very secure method, as we use no authentication. All protection is in
+the "secret" bucket key prefix.
 
 ## Requirements
 
@@ -15,17 +15,18 @@ no authentication. Protection is all in the "secret" bucket name.
 
 ## How to configure S3 bucket as pypi host
 
-1. Decide on unique and secret name of your S3 bucket. One simple way is to
+1. Decide on unique and secret key prefix for your S3 bucket. One simple way is to
    use https://www.uuidgenerator.net/ to generate globally unique identifier.
-   Be creative! I will assume that bucket name is `<bucket_name>`
+   Be creative! I will assume that prefix name is `<secret_prefix>`
 
 2. Go to [S3 AWS Management Console](https://console.aws.amazon.com/s3/home)
-   and create bucket with this name.
+   and create a new bucket (choose whatever reasonable name you want,
+   for example `pypi.yourcompany.com`). I will assume that bucket name is `<bucket_name>`.
 
 3. Click on the bucket name and in the Properties tab click on
    `Static website hosting`, and enable radio button
-   `Use this bucket to host a website`. Accept default values for
-   `Index document` and `Error document`.
+   `Use this bucket to host a website`. Make sure that value for
+   `Index document` is set to `index.html`.
 
 4. Make a note of website endpoint. It should look like this:
 
@@ -34,21 +35,41 @@ no authentication. Protection is all in the "secret" bucket name.
    ```
    Copy this name to the clipboard, as you will need it later
 
-5. On your computer, open (or create) file `~/.config/pip/pip.conf` (on Windows file name is `~/AppData/Rouming/pip/pip.ini`) and
-   add the following under `[global]` section:
+5. Go to [AWS CloudFront](https://console.aws.amazon.com/cloudfront/home) and create
+   new distribution. We need CloudFront because pip refuses to locally cache packages
+   from unsecured PyPI sources. We will use CloudFront to wrap S3 bucket website into HTTPS.
+   
+   Use your S3 website endpoint as "Origin Domain Name", and accept all defaults.
+
+6. Wait till your CloudFront distribution activates. Make note of the domain name for the
+   created service. It looks something like this:
+   
+   '''
+   bz456hgfyth38dj.cloudfront.net
+   '''
+   
+   I will call it `<cloudfront_host>.cloudfron.net`.
+
+6. On your computer, open (or create) file `~/.config/pip/pip.conf` (on Windows file name is `~/AppData/Rouming/pip/pip.ini`) and
+   add the following entries (create sections as needed):
 
    ```
    [global]
-   extra-index-url=http://<bucket_name>.s3-website-<region>.amazonaws.com
-   trusted-host=<bucket_name>.s3-website-<region>.amazonaws.com
+   extra-index-url=https://<cloudfron_host>.cloudfront.net/<secret_prefix>
+   
+   [ilabs.s3util]
+   target=s3://<bucket_name>/<secret_prefix>
    ```
 
 Now your `pip install` command is ready to use your private PyPi (in addition
-to the public one)
+to the public one).
+
+Distribute `pip.conf` to all users that need to be able to install packages from private PyPI. They will not be
+able to upload packages to the PyPI. Typically only admin and build machines would have upload configured.
 
 ## Distributing private packages
 
-To distribute packages you need in addition to the steps above do this:
+To distribute (upload) packages you need in addition to the steps above do this:
 
 ### install this package
 ```
