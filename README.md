@@ -44,9 +44,9 @@ the "secret" bucket key prefix.
 6. Wait till your CloudFront distribution activates. Make note of the domain name for the
    created service. It looks something like this:
    
-   '''
+   ```
    bz456hgfyth38dj.cloudfront.net
-   '''
+   ```
    
    I will call it `<cloudfront_host>.cloudfron.net`.
 
@@ -64,7 +64,7 @@ the "secret" bucket key prefix.
 Now your `pip install` command is ready to use your private PyPi (in addition
 to the public one).
 
-Distribute `pip.conf` to all users that need to be able to install packages from private PyPI. They will not be
+Send (securely) `pip.conf` to all users that need to be able to install packages from private PyPI. They will not be
 able to upload packages to the PyPI. Typically only admin and build machines would have upload configured.
 
 ## Distributing private packages
